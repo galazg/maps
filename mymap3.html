@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>Google Maps Multiple Markers</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiKFXJ1tK53fldCsKgzclRthnowT9La3g" type="text/javascript"></script>
+</head>
+
+<body onload="loadCities();">
+
+  <!--  <p>Place: <input type="text" id="place" value="Eindhoven,Netherlands" /> </p>
+    <button type="button" onclick="process()">Find</button>
+    <p id="lat">Lat</p>
+    <p id="lon">Lon</p>  -->
+
+    <div id="map" style="width: 800px; height: 480px;"></div>
+
+    <script type="text/javascript">
+        
+        function loadCities() {
+			
+			var xhttp = new XMLHttpRequest();
+			/* //Unknown! this.resposeText returns as undefined type (cannot use split) when GET is async :S
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					console.log(this.responseText);
+					//placeMarkers(this.reponseText);
+					cities_ = String(this.reponseText);
+					cities_ = cities_.split("\n");
+		            console.log(cities_);
+					
+				}
+			};*/
+			xhttp.open("GET", "cities.txt", false);
+			xhttp.send();
+			//console.log(xhttp.responseText);
+            var cities = xhttp.responseText;
+            cities= cities.split("\n");
+            console.log(cities);
+            //placeMarkers(cities);
+            for (i = 0; i < cities.length; i++) {
+                getCoord(cities[i]);
+            }        
+
+        };
+        
+        function placeMarkers(cities_){
+		    //var cities_ = eval(cities);
+		    //var cities = "eindhoven,netherlands mexicali,mexico la+paz,mexico mexico+city,mexico monterrey,mexico guadalajara,mexico cancun,mexico los+angeles,united+states new+york,united+states las+vegas,united+states ottawa,canada quebec,canada montreal,canada toronto,canada san+jose,costa+rica london,united+kingdom dublin,ireland madrid,spain barcelona,spain paris,france brussels,belgium antwerp,belgium luxembourg,luxembourg amsterdam,netherlands rotterdam,netherlands maastricht,netherlands den+bosch,netherlands berlin,germany fussen,germany freiburg,germany frankfurt,germany dusseldorf,germany cologne,germany zurich,switzerland venice,italy rome,italy florence,italy pisa,italy verona,italy milan,italy prague,czech+republic athens,greece cairo,egypt beijing,china hong+kong,china shanghai,china";
+            //var cities_ = cities.split("\n");
+            //console.log(cities_);
+
+            for (i = 0; i < cities_.length; i++) {
+                getCoord(cities_[i]);
+            }
+            
+		};
+
+
+        function getCoord(city) {
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    //console.log(this.responseText);
+                    var obj = JSON.parse(this.responseText);
+                    //console.log(obj.results[0].geometry.location);
+                    //document.getElementById("lat").innerHTML = obj.results[0].geometry.location.lat;
+                    //document.getElementById("lon").innerHTML = obj.results[0].geometry.location.lng;
+
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(obj.results[0].geometry.location.lat, obj.results[0].geometry.location.lng),
+                        map: map
+                    });
+
+                }
+            };
+            //var place_ = document.getElementById("place").value;
+            var url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + city + "&key=AIzaSyDiKFXJ1tK53fldCsKgzclRthnowT9La3g";
+            //console.log(url);
+            xhttp.open("GET", url , true);
+            xhttp.send();
+
+        };
+
+        /* var locations = [
+           ['Bondi Beach', -33.890542, 151.274856, 4],
+           ['Coogee Beach', -33.923036, 151.259052, 5],
+           ['Cronulla Beach', -34.028249, 151.157507, 3],
+           ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+           ['Maroubra Beach', -33.950198, 151.259302, 1]
+         ];*/
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: new google.maps.LatLng(51.44, 5.47),
+            mapTypeControlOptions: {
+            mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
+                    'styled_map']
+          }
+        });
+        
+        var styledMapType = new google.maps.StyledMapType(
+		[
+			{
+				"featureType": "administrative",
+				"elementType": "all",
+				"stylers": [
+					{
+						"saturation": "-100"
+					}
+				]
+			},
+			{
+				"featureType": "administrative.province",
+				"elementType": "all",
+				"stylers": [
+					{
+						"visibility": "off"
+					}
+				]
+			},
+			{
+				"featureType": "landscape",
+				"elementType": "all",
+				"stylers": [
+					{
+						"saturation": -100
+					},
+					{
+						"lightness": 65
+					},
+					{
+						"visibility": "on"
+					}
+				]
+			},
+			{
+				"featureType": "poi",
+				"elementType": "all",
+				"stylers": [
+					{
+						"saturation": -100
+					},
+					{
+						"lightness": "50"
+					},
+					{
+						"visibility": "simplified"
+					}
+				]
+			},
+			{
+				"featureType": "road",
+				"elementType": "all",
+				"stylers": [
+					{
+						"saturation": "-100"
+					}
+				]
+			},
+			{
+				"featureType": "road.highway",
+				"elementType": "all",
+				"stylers": [
+					{
+						"visibility": "simplified"
+					}
+				]
+			},
+			{
+				"featureType": "road.arterial",
+				"elementType": "all",
+				"stylers": [
+					{
+						"lightness": "30"
+					}
+				]
+			},
+			{
+				"featureType": "road.local",
+				"elementType": "all",
+				"stylers": [
+					{
+						"lightness": "40"
+					}
+				]
+			},
+			{
+				"featureType": "transit",
+				"elementType": "all",
+				"stylers": [
+					{
+						"saturation": -100
+					},
+					{
+						"visibility": "simplified"
+					}
+				]
+			},
+			{
+				"featureType": "water",
+				"elementType": "geometry",
+				"stylers": [
+					{
+						"hue": "#ffff00"
+					},
+					{
+						"lightness": -25
+					},
+					{
+						"saturation": -97
+					}
+				]
+			},
+			{
+				"featureType": "water",
+				"elementType": "labels",
+				"stylers": [
+					{
+						"lightness": -25
+					},
+					{
+						"saturation": -100
+					}
+				]
+			}
+		],{name: 'Styled Map'});
+
+        //Associate the styled map with the MapTypeId and set it to display.
+        map.mapTypes.set('styled_map', styledMapType);
+        map.setMapTypeId('styled_map');
+
+
+
+        /*var infowindow = new google.maps.InfoWindow();
+
+        var marker, i;
+
+        for (i = 0; i < locations.length; i++) {  
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            map: map
+          });
+
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(locations[i][0]);
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
+        }*/
+        
+    </script>
+</body>
+
+</html>

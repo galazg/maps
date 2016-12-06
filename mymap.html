@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    
+    <p>Place: <input type = "text" id = "place" value = "Eindhoven,Netherlands" /> </p>
+	<button type="button" onclick="getCoord()">Find</button>
+	<p id="lat">Lat</p>
+	<p id="lon">Lon</p>
+
+   
+    <div id="map"></div>
+    <script>
+      
+      
+		function getCoord(){
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				//console.log(this.responseText);
+				var obj = JSON.parse(this.responseText);
+				console.log(obj.results[0].geometry.location);
+				document.getElementById("lat").innerHTML = obj.results[0].geometry.location.lat;
+				document.getElementById("lon").innerHTML = obj.results[0].geometry.location.lng;
+				
+				//return obj.results[0].geometry.location;
+				//document.getElementById("status").style.font = "italic bold 20px arial,serif";
+				//document.getElementById("status").innerHTML = "The token balance and rights of user " + user + " have been cleared";
+				}
+			};
+			var place_ = document.getElementById("place").value;
+			xhttp.open("GET", "https://maps.googleapis.com/maps/api/geocode/json?address=" + place_ + "&key=AIzaSyDiKFXJ1tK53fldCsKgzclRthnowT9La3g", true);
+			//var data = JSON.stringify(command_obj);
+			xhttp.send();
+			
+			
+		};
+      
+      function initMap() {
+		 //var coords = getCoord();
+		 //console.log(coords);
+       	var uluru = {lat: -25.363, lng: 131.044};
+       	//var newcoord = getCoord("Eindhoven, Netherlands");
+       	//console.log(newcoord);
+       	
+		//uluru.lat = parseFloat(document.getElementById("lat").value);
+		//uluru.lng = parseFloat(document.getElementById("lon").value); 
+		
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 4,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+        
+        
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiKFXJ1tK53fldCsKgzclRthnowT9La3g&callback=initMap">
+    </script>
+  </body>
+</html>

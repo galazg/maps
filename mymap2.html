@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>Google Maps Multiple Markers</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiKFXJ1tK53fldCsKgzclRthnowT9La3g" type="text/javascript"></script>
+</head>
+
+<body onload="loadCities();">
+
+    <p>Place: <input type="text" id="place" value="Eindhoven,Netherlands" /> </p>
+    <button type="button" onclick="process()">Find</button>
+    <p id="lat">Lat</p>
+    <p id="lon">Lon</p>
+
+    <div id="map" style="width: 640px; height: 480px;"></div>
+
+
+    <script type="text/javascript">
+        
+        
+        function loadCities() {
+            var cities = "eindhoven,netherlands mexicali,mexico la+paz,mexico mexico+city,mexico monterrey,mexico guadalajara,mexico cancun,mexico los+angeles,united+states new+york,united+states las+vegas,united+states ottawa,canada quebec,canada montreal,canada toronto,canada san+jose,costa+rica london,united+kingdom dublin,ireland madrid,spain barcelona,spain paris,france brussels,belgium antwerp,belgium luxembourg,luxembourg amsterdam,netherlands rotterdam,netherlands maastricht,netherlands den+bosch,netherlands berlin,germany fussen,germany freiburg,germany frankfurt,germany dusseldorf,germany cologne,germany zurich,switzerland venice,italy rome,italy florence,italy pisa,italy verona,italy milan,italy prague,czech+republic athens,greece cairo,egypt beijing,china hong+kong,china shanghai,china";
+            var cities_ = cities.split(" ");
+            console.log(cities_);
+
+            for (i = 0; i < cities_.length; i++) {
+                getCoord(cities_[i]);
+            }
+        };
+
+
+        function getCoord(city) {
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    //console.log(this.responseText);
+                    var obj = JSON.parse(this.responseText);
+                    console.log(obj.results[0].geometry.location);
+                    //document.getElementById("lat").innerHTML = obj.results[0].geometry.location.lat;
+                    //document.getElementById("lon").innerHTML = obj.results[0].geometry.location.lng;
+
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(obj.results[0].geometry.location.lat, obj.results[0].geometry.location.lng),
+                        map: map
+                    });
+
+                }
+            };
+            //var place_ = document.getElementById("place").value;
+            xhttp.open("GET", "https://maps.googleapis.com/maps/api/geocode/json?address=" + city + "&key=AIzaSyDiKFXJ1tK53fldCsKgzclRthnowT9La3g", true);
+            xhttp.send();
+
+        };
+
+        /* var locations = [
+           ['Bondi Beach', -33.890542, 151.274856, 4],
+           ['Coogee Beach', -33.923036, 151.259052, 5],
+           ['Cronulla Beach', -34.028249, 151.157507, 3],
+           ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+           ['Maroubra Beach', -33.950198, 151.259302, 1]
+         ];*/
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: new google.maps.LatLng(51.44, 5.47),
+            mapTypeControlOptions: {
+            mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain',
+                    'styled_map']
+          }
+        });
+        
+        var styledMapType = new google.maps.StyledMapType(
+[
+    {
+        "featureType": "all",
+        "elementType": "all",
+        "stylers": [
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            },
+            {
+                "saturation": "-100"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "saturation": 36
+            },
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 40
+            },
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "visibility": "off"
+            },
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 20
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 17
+            },
+            {
+                "weight": 1.2
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 20
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#4d6059"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#4d6059"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape.natural",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#4d6059"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "lightness": 21
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#4d6059"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#4d6059"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "color": "#7f8d89"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#7f8d89"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#7f8d89"
+            },
+            {
+                "lightness": 17
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#7f8d89"
+            },
+            {
+                "lightness": 29
+            },
+            {
+                "weight": 0.2
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 18
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#7f8d89"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#7f8d89"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#7f8d89"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#7f8d89"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 19
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "all",
+        "stylers": [
+            {
+                "color": "#2b3638"
+            },
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#2b3638"
+            },
+            {
+                "lightness": 17
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#24282b"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#24282b"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels.text",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    }
+],
+            {name: 'Styled Map'});
+
+        //Associate the styled map with the MapTypeId and set it to display.
+        map.mapTypes.set('styled_map', styledMapType);
+        map.setMapTypeId('styled_map');
+
+        /*var infowindow = new google.maps.InfoWindow();
+
+        var marker, i;
+
+        for (i = 0; i < locations.length; i++) {  
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            map: map
+          });
+
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+              infowindow.setContent(locations[i][0]);
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
+        }*/
+        
+    </script>
+</body>
+
+</html>

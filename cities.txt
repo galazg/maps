@@ -1,0 +1,46 @@
+eindhoven,netherlands
+mexicali,mexico
+la paz,mexico
+mexico city,mexico
+monterrey,mexico
+guadalajara,mexico
+cancun,mexico
+los angeles,united states
+new york,united states
+las vegas,united states
+ottawa,canada
+quebec,canada
+montreal,canada
+toronto,canada
+san jose,costa rica
+london,united kingdom
+dublin,ireland
+madrid,spain
+barcelona,spain
+paris,france
+brussels,belgium
+antwerp,belgium
+luxembourg,luxembourg
+amsterdam,netherlands
+rotterdam,netherlands
+maastricht,netherlands
+den bosch,netherlands
+berlin,germany
+fussen,germany
+freiburg,germany
+frankfurt,germany
+dusseldorf,germany
+cologne,germany
+zurich,switzerland
+venice,italy
+rome,italy
+florence,italy
+pisa,italy
+verona,italy
+milan,italy
+prague,czech republic
+athens,greece
+cairo,egypt
+beijing,china
+hong kong,china
+shanghai,china
